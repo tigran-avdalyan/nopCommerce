@@ -420,6 +420,11 @@
     <Compile Include="Validators\Catalog\ProductValidator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\adminLTEcustom.css" />
+    <Content Include="Content\font-awesome.css" />
+    <Content Include="Content\font-awesome.min.css" />
+    <Content Include="Content\images\logo-mini.png" />
+    <Content Include="Content\images\logo.png" />
     <Content Include="db_backups\placeholder.txt" />
     <Content Include="Content\images\ajax_loader_small.gif" />
     <Content Include="Content\styles.rtl.css" />
@@ -448,7 +453,6 @@
     <Content Include="Content\images\ico-system.png" />
     <Content Include="Content\images\ico-warnings.gif" />
     <Content Include="Content\images\throbber-synchronizing.gif" />
-    <Content Include="Content\images\logo.gif" />
     <Content Include="Content\images\success-message.gif" />
     <Content Include="Content\images\active-false.gif" />
     <Content Include="Content\images\warnings-ajax-loader.gif" />
@@ -456,6 +460,7 @@
     <Content Include="Content\images\warnings-tick.png" />
     <Content Include="Content\images\warnings-warning.png" />
     <Content Include="Content\styles.css" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="sitemap.config">
       <SubType>Designer</SubType>
     </Content>
@@ -964,6 +969,11 @@
     <Content Include="Views\Common\LanguageSelector.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="fonts\FontAwesome.otf" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
     <None Include="Views\Product\_ProductAttributes.cshtml" />
     <Content Include="Views\Setting\_ReturnRequestReasons.cshtml" />
     <Content Include="Views\Setting\ReturnRequestReasonEdit.cshtml" />

@@ -97,7 +97,7 @@ namespace Nop.Web.Framework.Menu
             }
 
             //image URL
-            siteMapNode.ImageUrl = GetStringValueFromAttribute(xmlNode, "ImageUrl");
+            siteMapNode.IconClass = GetStringValueFromAttribute(xmlNode, "IconClass");
 
             //permission name
             var permissionNames = GetStringValueFromAttribute(xmlNode, "PermissionNames");
