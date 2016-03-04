@@ -23,18 +23,14 @@ namespace Nop.Web.Framework
 
         public static MvcHtmlString Hint(this HtmlHelper helper, string value)
         {
-            // Create tag builder
-            var builder = new TagBuilder("img");
+            //create tag builder
+            var builder = new TagBuilder("i");
 
-            // Add attributes
-            var urlHelper = new UrlHelper(helper.ViewContext.RequestContext);
-            var url = MvcHtmlString.Create(urlHelper.Content("~/Administration/Content/images/ico-help.gif")).ToHtmlString();
-
-            builder.MergeAttribute("src", url);
-            builder.MergeAttribute("alt", value);
+            //add attributes
+            builder.MergeAttribute("class", "fa fa-question-circle");
             builder.MergeAttribute("title", value);
 
-            // Render tag
+            //render tag
             return MvcHtmlString.Create(builder.ToString());
         }
 
@@ -181,9 +177,27 @@ namespace Nop.Web.Framework
                         .GetResource(resourceDisplayName.ResourceKey + ".Hint", langId);
 
                     result.Append(helper.Hint(hintResource).ToHtmlString());
+                    result.Append("&nbsp;");
                 }
             }
-            result.Append(helper.LabelFor(expression, new { title = hintResource }));
+            result.Append(helper.LabelFor(expression, new { title = hintResource, @class = "control-label" }));
+            return MvcHtmlString.Create(result.ToString());
+        }
+
+        public static MvcHtmlString NopEditor<TModel, TValue>(this HtmlHelper<TModel> helper, Expression<Func<TModel, TValue>> expression)
+        {
+            var result = new StringBuilder();
+            result.Append(helper.EditorFor(expression));
+            result.Replace("class=\"text-box single-line\"", "class=\"text-box single-line form-control\"");
+
+            return MvcHtmlString.Create(result.ToString());
+        }
+
+        public static MvcHtmlString NopDropDownList<TModel>(this HtmlHelper<TModel> helper, string name, IList<SelectListItem> itemList)
+        {
+            var result = new StringBuilder();
+            result.Append(helper.DropDownList(name, itemList, new {@class = "form-control" }));
+
             return MvcHtmlString.Create(result.ToString());
         }
 
