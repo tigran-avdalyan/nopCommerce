@@ -21,6 +21,11 @@ namespace Nop.Services.Common
 
         #region Ctor
 
+        /// <summary>
+        /// Ctor
+        /// </summary>
+        /// <param name="searchTermRepository">Search term repository</param>
+        /// <param name="eventPublisher">Event publisher</param>
         public SearchTermService(IRepository<SearchTerm> searchTermRepository,
             IEventPublisher eventPublisher)
         {
@@ -36,10 +41,10 @@ namespace Nop.Services.Common
         /// Deletes a search term record
         /// </summary>
         /// <param name="searchTerm">Search term</param>
-        public virtual void DeleteAddress(SearchTerm searchTerm)
+        public virtual void DeleteSearchTerm(SearchTerm searchTerm)
         {
             if (searchTerm == null)
-                throw new ArgumentNullException("searchTerm");
+                throw new ArgumentNullException(nameof(searchTerm));
 
             _searchTermRepository.Delete(searchTerm);
 
@@ -68,7 +73,7 @@ namespace Nop.Services.Common
         /// <returns>Search term</returns>
         public virtual SearchTerm GetSearchTermByKeyword(string keyword, int storeId)
         {
-            if (String.IsNullOrEmpty(keyword))
+            if (string.IsNullOrEmpty(keyword))
                 return null;
 
             var query = from st in _searchTermRepository.Table
@@ -112,7 +117,7 @@ namespace Nop.Services.Common
         public virtual void InsertSearchTerm(SearchTerm searchTerm)
         {
             if (searchTerm == null)
-                throw new ArgumentNullException("searchTerm");
+                throw new ArgumentNullException(nameof(searchTerm));
 
             _searchTermRepository.Insert(searchTerm);
 
@@ -127,7 +132,7 @@ namespace Nop.Services.Common
         public virtual void UpdateSearchTerm(SearchTerm searchTerm)
         {
             if (searchTerm == null)
-                throw new ArgumentNullException("searchTerm");
+                throw new ArgumentNullException(nameof(searchTerm));
 
             _searchTermRepository.Update(searchTerm);
 

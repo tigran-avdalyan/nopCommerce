@@ -7,6 +7,9 @@ using Nop.Data.Initializers;
 
 namespace Nop.Data
 {
+    /// <summary>
+    /// SQL Serevr Compact provider
+    /// </summary>
     public class SqlCeDataProvider : IDataProvider
     {
         /// <summary>
@@ -47,12 +50,30 @@ namespace Nop.Data
         }
 
         /// <summary>
+        /// A value indicating whether this data provider supports backup
+        /// </summary>
+        public bool BackupSupported
+        {
+            get { return false; }
+        }
+
+        /// <summary>
         /// Gets a support database parameter object (used by stored procedures)
         /// </summary>
         /// <returns>Parameter</returns>
         public virtual DbParameter GetParameter()
         {
             return new SqlParameter();
+        }
+
+        /// <summary>
+        /// Maximum length of the data for HASHBYTES functions
+        /// returns 0 if HASHBYTES function is not supported
+        /// </summary>
+        /// <returns>Length of the data for HASHBYTES functions</returns>
+        public int SupportedLengthOfBinaryHash()
+        {
+            return 0; //HASHBYTES functions is missing in SQL CE
         }
     }
 }

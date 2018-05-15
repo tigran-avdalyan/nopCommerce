@@ -6,26 +6,34 @@ using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
 using System.IO;
 using System.Text;
-using System.Web.Hosting;
+using Nop.Core;
 using Nop.Core.Data;
 using Nop.Data.Initializers;
 
 namespace Nop.Data
 {
+    /// <summary>
+    /// SQL Server data provider
+    /// </summary>
     public class SqlServerDataProvider : IDataProvider
     {
         #region Utilities
 
+        /// <summary>
+        /// Parse commands
+        /// </summary>
+        /// <param name="filePath">File path</param>
+        /// <param name="throwExceptionIfNonExists">Throw exception if the file doesn't exist</param>
+        /// <returns></returns>
         protected virtual string[] ParseCommands(string filePath, bool throwExceptionIfNonExists)
         {
             if (!File.Exists(filePath))
             {
                 if (throwExceptionIfNonExists)
-                    throw new ArgumentException(string.Format("Specified file doesn't exist - {0}", filePath));
+                    throw new ArgumentException($"Specified file doesn't exist - {filePath}");
                 
                 return new string[0];
             }
-
 
             var statements = new List<string>();
             using (var stream = File.OpenRead(filePath))
@@ -41,6 +49,11 @@ namespace Nop.Data
             return statements.ToArray();
         }
 
+        /// <summary>
+        /// Read the next statement from stream
+        /// </summary>
+        /// <param name="reader">Reader</param>
+        /// <returns>String</returns>
         protected virtual string ReadNextStatementFromStream(StreamReader reader)
         {
             var sb = new StringBuilder();
@@ -97,13 +110,11 @@ namespace Nop.Data
             //pass some table names to ensure that we have nopCommerce 2.X installed
             var tablesToValidate = new[] { "Customer", "Discount", "Order", "Product", "ShoppingCartItem" };
 
-            //custom commands (stored proedures, indexes)
+            //custom commands (stored procedures, indexes)
 
             var customCommands = new List<string>();
-            //use webHelper.MapPath instead of HostingEnvironment.MapPath which is not available in unit tests
-            customCommands.AddRange(ParseCommands(HostingEnvironment.MapPath("~/App_Data/Install/SqlServer.Indexes.sql"), false));
-            //use webHelper.MapPath instead of HostingEnvironment.MapPath which is not available in unit tests
-            customCommands.AddRange(ParseCommands(HostingEnvironment.MapPath("~/App_Data/Install/SqlServer.StoredProcedures.sql"), false));
+            customCommands.AddRange(ParseCommands(CommonHelper.MapPath("~/App_Data/Install/SqlServer.Indexes.sql"), false));
+            customCommands.AddRange(ParseCommands(CommonHelper.MapPath("~/App_Data/Install/SqlServer.StoredProcedures.sql"), false));
 
             var initializer = new CreateTablesIfNotExist<NopObjectContext>(tablesToValidate, customCommands.ToArray());
             Database.SetInitializer(initializer);
@@ -118,12 +129,30 @@ namespace Nop.Data
         }
 
         /// <summary>
+        /// A value indicating whether this data provider supports backup
+        /// </summary>
+        public virtual bool BackupSupported
+        {
+            get { return true; }
+        }
+
+        /// <summary>
         /// Gets a support database parameter object (used by stored procedures)
         /// </summary>
         /// <returns>Parameter</returns>
         public virtual DbParameter GetParameter()
         {
             return new SqlParameter();
+        }
+
+        /// <summary>
+        /// Maximum length of the data for HASHBYTES functions
+        /// returns 0 if HASHBYTES function is not supported
+        /// </summary>
+        /// <returns>Length of the data for HASHBYTES functions</returns>
+        public int SupportedLengthOfBinaryHash()
+        {
+            return 8000; //for SQL Server 2008 and above HASHBYTES function has a limit of 8000 characters.
         }
 
         #endregion
